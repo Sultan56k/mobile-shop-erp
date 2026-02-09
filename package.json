@@ -1,0 +1,22 @@
+{
+  "name": "mobile-shop-erp",
+  "version": "1.0.0",
+  "description": "Local ERP system for mobile shop - Full Stack",
+  "private": true,
+  "scripts": {
+    "install:all": "npm run install:backend && npm run install:frontend",
+    "install:backend": "cd backend && npm install",
+    "install:frontend": "cd frontend && npm install",
+    "build:frontend": "cd frontend && npm run build",
+    "start": "cd backend && npm start",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "keywords": ["erp", "inventory", "sales", "mobile-shop"],
+  "author": "",
+  "license": "MIT"
+}
