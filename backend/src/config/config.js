@@ -90,8 +90,29 @@ const config = {
 
   // CORS (for local and production frontend)
   cors: {
-    origin: process.env.FRONTEND_URL || process.env.RAILWAY_STATIC_URL || 'http://localhost:5173',
-    credentials: true
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl)
+      if (!origin) return callback(null, true);
+
+      // List of allowed origins
+      const allowedOrigins = [
+        'http://localhost:5173',
+        'http://localhost:5000',
+        process.env.FRONTEND_URL,
+        process.env.RAILWAY_STATIC_URL
+      ].filter(Boolean); // Remove undefined values
+
+      // Check if origin is in allowed list or matches Vercel pattern
+      if (allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
+        callback(null, true);
+      } else {
+        console.log('❌ CORS blocked origin:', origin);
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
   }
 };
 

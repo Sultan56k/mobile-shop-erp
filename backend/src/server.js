@@ -21,6 +21,8 @@ app.use(express.urlencoded({ extended: true }));
 // Request logging
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  console.log('Origin:', req.get('origin'));
+  console.log('Full URL:', req.originalUrl);
   next();
 });
 
@@ -50,6 +52,8 @@ app.use('/api/reports', reportRoutes);
 
 // ===== Error Handling =====
 app.use((req, res) => {
+  console.log('❌ 404 - Endpoint not found:', req.method, req.originalUrl);
+  console.log('   Headers:', JSON.stringify(req.headers, null, 2));
   res.status(404).json({
     success: false,
     error: 'Endpoint not found'
@@ -87,6 +91,8 @@ async function startServer() {
       console.log('✓ Server is running!');
       console.log(`✓ Local: http://localhost:${config.port}`);
       console.log(`✓ Database: ${config.database.storage}`);
+      console.log(`✓ CORS: Allowing Vercel apps + env FRONTEND_URL`);
+      console.log(`   FRONTEND_URL: ${process.env.FRONTEND_URL || 'not set'}`);
       console.log('=================================\n');
       console.log('Press Ctrl+C to stop\n');
     });
