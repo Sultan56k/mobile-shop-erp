@@ -3,17 +3,24 @@ export default function Input({
   error,
   required = false,
   className = '',
+  id,
+  name,
   ...props
 }) {
+  // Generate a unique ID if not provided
+  const inputId = id || name || `input-${label?.toLowerCase().replace(/\s+/g, '-')}`;
+
   return (
     <div className="w-full">
       {label && (
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor={inputId} className="block text-sm font-medium text-gray-700 mb-1">
           {label}
           {required && <span className="text-red-500 ml-1">*</span>}
         </label>
       )}
       <input
+        id={inputId}
+        name={name || inputId}
         className={`input ${error ? 'input-error' : ''} ${className}`}
         {...props}
       />

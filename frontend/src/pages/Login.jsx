@@ -53,20 +53,24 @@ export default function Login() {
 
           <Input
             label="Username"
+            name="username"
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             placeholder="Enter your username"
             required
+            autoComplete="username"
           />
 
           <Input
             label="Password"
+            name="password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter your password"
             required
+            autoComplete="current-password"
           />
 
           <Button
