@@ -20,18 +20,30 @@ export function AuthProvider({ children }) {
 
   const login = async (username, password) => {
     try {
-      const response = await authAPI.login({ username, password });
-      const { user, token } = response.data.data;
+      console.log('🔐 [AUTH] Starting login process...');
+      console.log('🔐 [AUTH] Username:', username);
+      console.log('🔐 [AUTH] API URL:', import.meta.env.VITE_API_URL || 'http://localhost:5000/api');
 
+      const response = await authAPI.login({ username, password });
+
+      console.log('✅ [AUTH] Login successful!');
+      console.log('✅ [AUTH] Response:', response.data);
+
+      const { user, token } = response.data.data;
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
       setUser(user);
 
       return { success: true };
     } catch (error) {
+      console.error('❌ [AUTH] Login failed!');
+      console.error('❌ [AUTH] Error:', error.message);
+      console.error('❌ [AUTH] Status:', error.response?.status);
+      console.error('❌ [AUTH] Data:', error.response?.data);
+
       return {
         success: false,
-        error: error.response?.data?.error || 'Login failed'
+        error: error.response?.data?.error || error.message || 'Login failed'
       };
     }
   };

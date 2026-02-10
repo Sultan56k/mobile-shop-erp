@@ -17,6 +17,12 @@ const api = axios.create({
 // Add auth token to requests
 api.interceptors.request.use(
   (config) => {
+    console.log('📤 [API] Request:', {
+      method: config.method.toUpperCase(),
+      url: `${config.baseURL}${config.url}`,
+      data: config.data
+    });
+
     const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -24,14 +30,28 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
+    console.error('❌ [API] Request error:', error);
     return Promise.reject(error);
   }
 );
 
 // Handle response errors
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    console.log('📥 [API] Response:', {
+      status: response.status,
+      url: response.config.url,
+      data: response.data
+    });
+    return response;
+  },
   (error) => {
+    console.error('❌ [API] Response error:', {
+      message: error.message,
+      status: error.response?.status,
+      data: error.response?.data
+    });
+
     if (error.response?.status === 401) {
       // Token expired or invalid
       localStorage.removeItem('token');
